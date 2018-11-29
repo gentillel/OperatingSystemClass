@@ -24,27 +24,30 @@ main(){
       
 
  	makeInterrupt21();
-  //   interrupt(0x21,0,"enter line: ",0,0);
-  //   interrupt(0x21,1,line,0,0);
+    // interrupt(0x21,0,"enter line: ",0,0);
+    // interrupt(0x21,1,line,0,0);
  	// interrupt(0x21,2,buffer,30,0);
- 	interrupt(0x21,3,"message",buffer,0);
- 	printString(buffer);
+ 	// interrupt(0x21,3,"message",buffer,0);
+ 	interrupt(0x21,4,"tstprg",4000,0);
+ 	// printString(buffer);
  	
  	// executeProgram("tstprg",4000);
 	terminate();	
 }
 
 void executeProgram(char* name, int segment){ 
-	char programBuffer[13312];
+	char programBuffer[13312]; //files cannot exceed 13312
 	int i = 0;
 	readFile("tstprg",programBuffer); //read target prg into buffer
-	
 
-	//loop through buffer and put in memory ??? adress?
-	for(i = 0; i < 13312; i++){
+	//loop through buffer and put in memory
+	//* 13312 takes too long for now so for debugging purposes 
+	//we go up to 3 segment or 3*512 = 1536
+	for(i = 0; i < 1536; i++){
 		putInMemory (segment, i,programBuffer[i]);
-	}
 
+	}
+	if(DEBBUG){printString("Launching Program ");}
 	launchProgram(segment);
 	
 }
@@ -118,6 +121,11 @@ void handleInterrupt21(int ax,char* bx,int cx,int dx){
 		case 3:
 			readFile(bx,cx);
 			break;
+		case 4:
+			//@params: bx == name of the program, cx == segment
+			executeProgram(bx,cx);
+			break;
+
 		case 5:
 			terminate();
 			break;
