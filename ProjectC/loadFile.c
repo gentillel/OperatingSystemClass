@@ -27,10 +27,10 @@ int main(int argc, char* argv[])
 
 	//open the floppy image
 	FILE* floppy;
-	floppy=fopen("floppya.img","r+");
+	floppy=fopen("floppy.img","r+");
 	if (floppy==0)
 	{
-		printf("floppya.img not found\n");
+		printf("floppy.img not found\n");
 		return 0;
 	}
 
