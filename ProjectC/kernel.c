@@ -25,11 +25,10 @@ main(){
 
  	makeInterrupt21();
     // interrupt(0x21,0,"enter line: ",0,0);
-    // interrupt(0x21,1,line,0,0);
+    interrupt(0x21,1,line,0,0);
  	// interrupt(0x21,2,buffer,30,0);
- 	// interrupt(0x21,3,"message",buffer,0);
- 	interrupt(0x21,4,"tstprg",4000,0);
- 	// printString(buffer);
+ 	interrupt(0x21,4,"shell",2000,0);
+ 	printString(buffer);
  	
  	// executeProgram("tstprg",4000);
 	terminate();	
@@ -38,8 +37,8 @@ main(){
 void executeProgram(char* name, int segment){ 
 	char programBuffer[13312]; //files cannot exceed 13312
 	int i = 0;
-	readFile("tstprg",programBuffer); //read target prg into buffer
-
+	readFile(name,programBuffer); //read target prg into buffer
+	if(DEBBUG){printString("Read in Program ");}
 	//loop through buffer and put in memory
 	//* 13312 takes too long for now so for debugging purposes 
 	//we go up to 3 segment or 3*512 = 1536
@@ -180,7 +179,7 @@ void readString(char* line){
 		a[1] = '\0';
 
 		if(a[0] == enter){
-			line[i] = '\n';
+			line[i] = '\0'; //previouslt '\n'
 			line[i+1] = '\0';
 			printString("\n");
 			break;
@@ -217,5 +216,13 @@ void printString(char* string){
 }
 
 void terminate(){
-	while(1);
+	char shell[6];
+	shell[0] = 's';
+	shell[1] = 'h';
+	shell[2] = 'e';
+	shell[3] = 'l';
+	shell[4] = 'l';
+	shell[5] = '\0';
+	executeProgram(shell,2000);
+	// while(1);
 }

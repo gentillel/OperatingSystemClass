@@ -9,9 +9,9 @@ as86 kernel.asm -o kernel_asm.o
 ld86 -d kernel_c.o kernel_asm.o -o kernel
 
 #compile and link the shell
-#bcc shell.c -ansi -c  -o shell.o
-#as86 lib.asm -o libShell.o
-#ld86 -d shell.o libShell.o -o shell
+bcc shell.c -ansi -c  -o shell.o
+as86 lib.asm -o libShell.o
+ld86 -d shell.o libShell.o -o shell
 
 #load the kernel at sector 3
 dd if=kernel of=floppy.img bs=512 conv=notrunc seek=3
@@ -23,4 +23,5 @@ dd if=dir.img of=floppy.img bs=512 count=1 seek=2 conv=notrunc
 gcc -o loadFile loadFile.c
 ./loadFile message.txt
 ./loadFile tstprg
+./loadFile shell
 
